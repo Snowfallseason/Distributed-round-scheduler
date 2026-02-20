@@ -21,7 +21,7 @@
 先聊聊为什么要采用冻结结构 因为客户在中控端上传的config参数有可能是在WAITING阶段更新的但是我又要保证客户体验时EXECUTING阶段的稳定性不采用冻结机制就很容易造成一部分客户机拿到的是旧的config参数一部分后进入阈值内的客户机拿到的是新的config参数导致本轮次失去想要的效果 这时我引入一个snapshot机制在整套系统进入EXECUTING阶段时本轮次所调用的参数全部复制一份并锁死，这样就可以避免造成客户机拿到乱序的参数问题
     再聊聊使用dataclass的意义 这个就很简单明了了 “保证代码的整洁和后续维护”
 
-  4.MQTT 协议应用  
+  4.MQTT 协议应用	  
    [1]Topic隔离意义  
    因为客户要求的应用端需要分为主从两个端 两端过程中所做的事情和需要的参数有区别 所以做了一个隔离来减少下发参数时还需要做大量的判断和过滤  
    
@@ -77,13 +77,13 @@
 
 [7]Release的生命周期总结	
 	总结说明一个Release的流程周期为	
-	1.客户端发 ready/hb，进入 online & ready（WAITING 期）
-	2.服务端判定达到 online 阈值 + ready 阈值
-	3.冻结 targets + 冻结 cfg/biz → snapshot
-	4.计算 buy_at（base_delay + boss_extra）
-	5.发布 Release（MQTT topic 或 HTTP release 返回）
-	6.EXECUTING 阶段只统计 targets 的 done
-	7.done 达标 / 超时 / 掉线超过阈值 → reset_round → 下一轮	
+	1.客户端发 ready/hb，进入 online & ready（WAITING 期）	
+	2.服务端判定达到 online 阈值 + ready 阈值	
+	3.冻结 targets + 冻结 cfg/biz → snapshot	
+	4.计算 buy_at（base_delay + boss_extra）	
+	5.发布 Release（MQTT topic 或 HTTP release 返回）	
+	6.EXECUTING 阶段只统计 targets 的 done	
+	7.done 达标 / 超时 / 掉线超过阈值 → reset_round → 下一轮		
 	—————————————————————————————————————————————————————————————	
 
 
